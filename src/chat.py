@@ -25,6 +25,9 @@ def main():
             for chunk in chain.stream(pergunta):
                 print(chunk, end="", flush=True)
             print()
+        except Exception as e:
+            print(f"\n❌ Erro ao processar resposta: {e}")
+            continue
         except KeyboardInterrupt:
             break
 

@@ -15,7 +15,7 @@ def list_available_models():
 
     genai.configure(api_key=api_key)
     for m in genai.list_models():
-        print(f"Nome: {m.name} | Métodos: {m.supported_generation_methods}")
+        print(f"Use no .env -> GOOGLE_LLM_MODEL={m.name.replace('models/', '')} | Métodos: {m.supported_generation_methods}")
 
 if __name__ == "__main__":
     list_available_models()

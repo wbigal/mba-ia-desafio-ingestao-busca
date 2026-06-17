@@ -38,10 +38,14 @@ load_dotenv()
 CONNECTION_STRING = os.getenv("DATABASE_URL")
 COLLECTION_NAME = os.getenv("PG_VECTOR_COLLECTION_NAME", "document_chunks")
 EMBEDDING_MODEL = os.getenv("GOOGLE_EMBEDDING_MODEL", "models/text-embedding-004")
+# Usamos um alias mais estável e removemos prefixos manuais para evitar duplicidade
+LLM_MODEL = os.getenv("GOOGLE_LLM_MODEL", "gemini-3.1-flash-lite").replace("models/", "")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-def search_prompt(question=None):
+def search_prompt():
     """Cria e retorna a chain de busca e resposta (RAG)."""
-    embeddings = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL)
+    # Garantimos que os embeddings também usem a chave de API explicitamente
+    embeddings = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL, google_api_key=GOOGLE_API_KEY)
     
     vectorstore = PGVector(
         embeddings=embeddings,
@@ -51,7 +55,15 @@ def search_prompt(question=None):
     )
     
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
-    model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
+    
+    # Garantimos que o modelo também receba a chave e suporte streaming
+    model = ChatGoogleGenerativeAI(
+        model=LLM_MODEL, 
+        google_api_key=GOOGLE_API_KEY,
+        version="v1", # Forçamos a versão estável v1
+        transport="rest",
+        temperature=0,
+    )
     
     prompt = PromptTemplate.from_template(PROMPT_TEMPLATE)
 

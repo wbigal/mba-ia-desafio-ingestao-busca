@@ -17,6 +17,7 @@ GOOGLE_API_KEY=sua_chave_aqui
 DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/rag
 PDF_PATH=./seu_documento.pdf
 GOOGLE_EMBEDDING_MODEL=models/text-embedding-004
+GOOGLE_LLM_MODEL=gemini-3.1-flash-lite
 PG_VECTOR_COLLECTION_NAME=document_chunks
 ```
 

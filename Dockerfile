@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir \
-    langchain langchain-community langchain-google-genai langchain-text-splitters pypdf psycopg2-binary langchain-postgres python-dotenv tqdm
+    langchain langchain-community "langchain-google-genai>=1.0.10" google-generativeai langchain-text-splitters pypdf psycopg2-binary "psycopg[binary]" langchain-postgres python-dotenv tqdm
 
 COPY . .
 
